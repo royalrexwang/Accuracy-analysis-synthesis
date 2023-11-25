@@ -160,7 +160,7 @@ screw_local_T = {[sp11,sp12,sp13,sp14,sp15,sp16];
                   [sp51,sp52,sp53,sp54,sp55,sp56,sp57];};
 screw_local = {theta_real1;theta_real2;theta_real3;theta_real4;theta_real5};
 % 带误差的参数
-d_par = 2e-3;
+d_par = 1e-3;
 % d_par = 0;
 screw_local_T_real = {[sp11,sp12,sp13,sp14,sp15,sp16]+se3ToVec(MatrixLog6(posture_matrix(d_par*rands(3,1),d_par*rands(3,1))));
                       [sp21,sp22,sp23,sp24,sp25,sp26,sp27]+se3ToVec(MatrixLog6(posture_matrix(d_par*rands(3,1),d_par*rands(3,1))));
@@ -194,8 +194,8 @@ for i = 1:5
     T_end_ideal(4*i-3:4*i,:) = local_POE(screw_local_T{i});
     T_end_real(4*i-3:4*i,:) = local_POE(screw_local_T_real{i});
     T_end_init(4*i-3:4*i,:) = local_POE(screw_local_T_init{i});
-    [theta{i},success] = IKinSpace(screw_ideal{i},T_end_ideal(4*i-3:4*i,:),T,theta0{i},0.00000000000001,0.00000000000001);
-    [theta{i},success1] = IKinSpace(screw_ideal_init0{i},T_end_init(4*i-3:4*i,:),T,theta0{i},0.00000000000001,0.00000000000001);
+    [theta{i},success] = IKinSpace(screw_ideal{i},T_end_ideal(4*i-3:4*i,:),T,theta0{i},1e-12,1e-12);
+    [theta{i},success1] = IKinSpace(screw_ideal_init0{i},T_end_init(4*i-3:4*i,:),T,theta0{i},1e-12,1e-12);
 %     [success success1]
 end
 % screw_local 关节旋量在局部坐标系下的表征（单位旋量）

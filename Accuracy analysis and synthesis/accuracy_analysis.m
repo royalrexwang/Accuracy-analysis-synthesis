@@ -19,7 +19,7 @@ initial_parameters_initp;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 选取工作空间
 % 确定点数为n
-n = 10;
+n = 25;
 x = linspace(0,0,n)/1000;
 y = linspace(-50,50,n)/1000;
 z = linspace(146,146+100,n)/1000;
@@ -36,7 +36,7 @@ for i = 1:n^2
     T_ideal(4*i-3:4*i,:) = posture_matrix(p_new1(:,i),angle);
     P(:,i) = T_ideal(4*i-3:4*i-1,4);
 end
-T_ideal = gpuArray(T_ideal);
+% T_ideal = gpuArray(T_ideal);
 % 生成运动学参数随机误差
 tic
 d_par = 0.5e-3;
@@ -44,7 +44,7 @@ delta_P = zeros(2,n^2);
 delta_VA = zeros(2,n^2);
 for i = 1:n^2
     disp(i)
-    for j = 1:1000
+    parfor j = 1:1000
         theta_ideal = zeros(29,1);
         screw_local_T_monto = {screw_local_T{1} + se3ToVec(MatrixLog6(posture_matrix(d_par*rands(3,1),d_par*rands(3,1))));
                           screw_local_T{2} + se3ToVec(MatrixLog6(posture_matrix(d_par*rands(3,1),d_par*rands(3,1))));
@@ -56,9 +56,10 @@ for i = 1:n^2
         tt = [T_real_j(1:3,4);PoseTrans(T_real_j(1:3,1:3),'OTC')] - ...
             [T_ideal(4*i-3:4*i-1,4);PoseTrans(T_ideal(4*i-3:4*i-1,1:3),'OTC')];
         delta_P(:,j) = [norm(tt(2:3));norm(tt(4:6))];
-        
+        j
     end
     delta_VA(:,i) = mean(delta_P')';
+    clc
 end
 % 绘图c
 figure(1)

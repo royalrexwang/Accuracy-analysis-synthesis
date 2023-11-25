@@ -2,7 +2,7 @@ function [f,theta_new]= realPosture1(screw,theta,screw_T)
 % 由理论末端位姿推导实际末端位姿
 % 输入：旋量轴（5根支链）-元胞，关节角（五根支链所以关节角）-元胞
 % 输出：实际末端位姿
-
+% theta
 % 末端旋量作差初始化
 e_ij = ones(24,1);
 % 迭代
